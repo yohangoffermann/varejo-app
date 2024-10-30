@@ -1,125 +1,134 @@
+:root {
+    --primary-color: #0066cc;
+    --secondary-color: #ff6600;
+    --background-color: #f4f4f4;
+    --text-color: #333;
+    --card-bg: #ffffff;
+}
+
 body {
-    font-family: 'Helvetica Neue', Arial, sans-serif;
+    font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    color: #333;
-    background-color: #f4f4f4;
+    color: var(--text-color);
+    background-color: var(--background-color);
     margin: 0;
     padding: 0;
 }
 
-.container {
+header {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 1rem;
+}
+
+nav ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+nav ul li {
+    display: inline;
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+main {
     max-width: 1200px;
     margin: 0 auto;
     padding: 20px;
 }
 
-header {
-    text-align: center;
-    margin-bottom: 40px;
+h1, h2 {
+    color: var(--primary-color);
 }
 
-h1 {
-    color: #e62b1e;
-    font-size: 2.5em;
-}
-
-h2 {
-    color: #333;
-    border-bottom: 2px solid #e62b1e;
-    padding-bottom: 10px;
+.card {
+    background-color: var(--card-bg);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
 .flow-diagram {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 40px;
+    margin-bottom: 20px;
 }
 
-.node {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    width: 30%;
-}
-
-.flow-arrow {
-    width: 0;
-    height: 0;
-    border-top: 20px solid transparent;
-    border-bottom: 20px solid transparent;
-}
-
-.flow-arrow.right {
-    border-left: 20px solid #e62b1e;
-}
-
-.flow-arrow.left {
-    border-right: 20px solid #e62b1e;
-}
-
-.key-metrics {
+.scenario-tabs {
     display: flex;
-    justify-content: space-between;
-    margin-bottom: 40px;
+    justify-content: center;
+    margin-bottom: 20px;
 }
 
-.metric {
-    background-color: #fff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    width: 30%;
-    text-align: center;
+.tab-button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    border-radius: 5px;
 }
 
-.big-number {
-    font-size: 2em;
-    font-weight: bold;
-    color: #e62b1e;
+.tab-button.active {
+    background-color: var(--secondary-color);
+}
+
+.chart-container {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    background-color: #fff;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    margin-bottom: 20px;
 }
 
 th, td {
-    padding: 15px;
+    border: 1px solid #ddd;
+    padding: 12px;
     text-align: left;
-    border-bottom: 1px solid #ddd;
 }
 
 th {
-    background-color: #f2f2f2;
-    font-weight: bold;
+    background-color: var(--primary-color);
+    color: white;
 }
 
-tr:hover {
-    background-color: #f5f5f5;
+tr:nth-child(even) {
+    background-color: #f2f2f2;
 }
 
 footer {
+    background-color: var(--primary-color);
+    color: white;
     text-align: center;
-    margin-top: 40px;
-    color: #666;
+    padding: 1rem;
+    position: relative;
+    bottom: 0;
+    width: 100%;
 }
 
 @media (max-width: 768px) {
-    .flow-diagram, .key-metrics {
+    .flow-diagram {
         flex-direction: column;
     }
 
-    .node, .metric {
-        width: 100%;
-        margin-bottom: 20px;
+    .scenario-tabs {
+        flex-wrap: wrap;
     }
 
-    .flow-arrow {
-        transform: rotate(90deg);
-        margin: 20px 0;
+    .tab-button {
+        margin-bottom: 10px;
     }
 }
