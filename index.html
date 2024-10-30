@@ -4,74 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Análise Comparativa: Consórcio vs Financiamento Tradicional</title>
-    <link rel="stylesheet" href="https://yohangoffermann.github.io/varejo-app/css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 <body>
-    <header>
+    <div class="container">
         <h1>Análise Comparativa: Consórcio vs Financiamento Tradicional</h1>
-        <nav>
-            <ul>
-                <li><a href="#overview">Visão Geral</a></li>
-                <li><a href="#scenarios">Cenários</a></li>
-                <li><a href="#comparison">Comparação</a></li>
-                <li><a href="#conclusion">Conclusão</a></li>
-            </ul>
-        </nav>
-    </header>
+        
+        <div class="chart-container">
+            <div id="comparisonChart"></div>
+        </div>
+        
+        <div class="info-container">
+            <h2>Detalhes da Análise</h2>
+            <div id="analysisDetails"></div>
+        </div>
+    </div>
 
-    <main>
-        <section id="overview">
-            <h2>Visão Geral</h2>
-            <div class="card">
-                <p>Esta análise compara diferentes cenários de consórcio com o financiamento tradicional para a compra de um imóvel de R$ 1.200.000.</p>
-            </div>
-            <div class="flow-diagram">
-                <!-- Diagrama de fluxo será adicionado via JavaScript -->
-            </div>
-        </section>
-
-        <section id="scenarios">
-            <h2>Cenários de Consórcio</h2>
-            <div class="scenario-tabs">
-                <button class="tab-button active" data-scenario="1">Cenário 1</button>
-                <button class="tab-button" data-scenario="2">Cenário 2</button>
-                <button class="tab-button" data-scenario="3">Cenário 3</button>
-                <button class="tab-button" data-scenario="4">Cenário 4</button>
-                <button class="tab-button" data-scenario="5">Cenário 5</button>
-            </div>
-            <div class="scenario-content">
-                <!-- Conteúdo dos cenários será adicionado via JavaScript -->
-            </div>
-        </section>
-
-        <section id="comparison">
-            <h2>Comparação com Financiamento Tradicional</h2>
-            <div class="chart-container">
-                <canvas id="comparisonChart"></canvas>
-            </div>
-            <div class="comparison-table">
-                <!-- Tabela de comparação será adicionada via JavaScript -->
-            </div>
-        </section>
-
-        <section id="conclusion">
-            <h2>Conclusão</h2>
-            <div class="card">
-                <ul>
-                    <li>Todos os cenários de consórcio resultam em um total pago menor que o financiamento tradicional.</li>
-                    <li>As parcelas do consórcio são fixas, enquanto no financiamento tradicional elas são decrescentes.</li>
-                    <li>O prazo do consórcio é menor (188 meses) comparado ao financiamento tradicional (200 meses).</li>
-                    <li>Quanto maior o crédito contratado por Adenir, menor a entrada necessária para o comprador.</li>
-                </ul>
-            </div>
-        </section>
-    </main>
-
-    <footer>
-        <p>© 2023 Análise Financeira Inovadora. Todos os direitos reservados.</p>
-    </footer>
-
-    <script src="https://yohangoffermann.github.io/varejo-app/js/script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
