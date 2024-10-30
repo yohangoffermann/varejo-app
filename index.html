@@ -3,100 +3,75 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fluxo Financeiro: Consórcio vs Financiamento Tradicional</title>
+    <title>Análise Comparativa: Consórcio vs Financiamento Tradicional</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Fluxo Financeiro: Consórcio vs Financiamento Tradicional</h1>
-        </header>
+    <header>
+        <h1>Análise Comparativa: Consórcio vs Financiamento Tradicional</h1>
+        <nav>
+            <ul>
+                <li><a href="#overview">Visão Geral</a></li>
+                <li><a href="#scenarios">Cenários</a></li>
+                <li><a href="#comparison">Comparação</a></li>
+                <li><a href="#conclusion">Conclusão</a></li>
+            </ul>
+        </nav>
+    </header>
 
-        <main>
-            <section class="flow-diagram">
-                <div class="node" id="adenir">
-                    <h2>Adenir</h2>
-                    <p>Imóvel: R$ 1.200.000</p>
-                </div>
-                <div class="flow-arrow right"></div>
-                <div class="node" id="consorcio">
-                    <h2>Consórcio</h2>
-                    <p>Crédito: R$ 1.800.000</p>
-                    <p>Taxa Adm: 1,2% a.a.</p>
-                    <p>Prazo: 200 meses</p>
-                </div>
-                <div class="flow-arrow left"></div>
-                <div class="node" id="comprador">
-                    <h2>Comprador</h2>
-                    <p>Assume saldo: R$ 2.030.400</p>
-                    <p>Parcela: R$ 10.800</p>
-                    <p>Prazo: 188 meses</p>
-                </div>
-            </section>
+    <main>
+        <section id="overview">
+            <h2>Visão Geral</h2>
+            <div class="card">
+                <p>Esta análise compara diferentes cenários de consórcio com o financiamento tradicional para a compra de um imóvel de R$ 1.200.000.</p>
+            </div>
+            <div class="flow-diagram">
+                <!-- Diagrama de fluxo será adicionado via JavaScript -->
+            </div>
+        </section>
 
-            <section class="key-metrics">
-                <h2>Métricas Chave</h2>
-                <div class="metric">
-                    <h3>Retorno Adenir</h3>
-                    <p class="big-number">R$ 470.400</p>
-                    <p>39,2% sobre valor do imóvel</p>
-                </div>
-                <div class="metric">
-                    <h3>Economia Comprador</h3>
-                    <p class="big-number">R$ 1.398</p>
-                    <p>vs. parcela inicial financiamento</p>
-                </div>
-                <div class="metric">
-                    <h3>Custo Efetivo Total</h3>
-                    <p class="big-number">6,17% a.a.</p>
-                    <p>vs. 10,49% a.a. no financiamento</p>
-                </div>
-            </section>
+        <section id="scenarios">
+            <h2>Cenários de Consórcio</h2>
+            <div class="scenario-tabs">
+                <button class="tab-button active" data-scenario="1">Cenário 1</button>
+                <button class="tab-button" data-scenario="2">Cenário 2</button>
+                <button class="tab-button" data-scenario="3">Cenário 3</button>
+                <button class="tab-button" data-scenario="4">Cenário 4</button>
+                <button class="tab-button" data-scenario="5">Cenário 5</button>
+            </div>
+            <div class="scenario-content">
+                <!-- Conteúdo dos cenários será adicionado via JavaScript -->
+            </div>
+        </section>
 
-            <section class="comparison">
-                <h2>Comparativo Detalhado</h2>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Métrica</th>
-                            <th>Consórcio</th>
-                            <th>Financiamento Tradicional</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Entrada</td>
-                            <td>R$ 0</td>
-                            <td>R$ 240.000</td>
-                        </tr>
-                        <tr>
-                            <td>Valor Financiado</td>
-                            <td>R$ 2.030.400</td>
-                            <td>R$ 960.000</td>
-                        </tr>
-                        <tr>
-                            <td>Parcela Inicial</td>
-                            <td>R$ 10.800</td>
-                            <td>R$ 13.052</td>
-                        </tr>
-                        <tr>
-                            <td>Prazo</td>
-                            <td>188 meses</td>
-                            <td>200 meses</td>
-                        </tr>
-                        <tr>
-                            <td>Total Pago</td>
-                            <td>R$ 2.030.400</td>
-                            <td>R$ 2.031.798</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </section>
-        </main>
+        <section id="comparison">
+            <h2>Comparação com Financiamento Tradicional</h2>
+            <div class="chart-container">
+                <canvas id="comparisonChart"></canvas>
+            </div>
+            <div class="comparison-table">
+                <!-- Tabela de comparação será adicionada via JavaScript -->
+            </div>
+        </section>
 
-        <footer>
-            <p>© 2023 Análise Financeira Inovadora. Todos os direitos reservados.</p>
-        </footer>
-    </div>
+        <section id="conclusion">
+            <h2>Conclusão</h2>
+            <div class="card">
+                <ul>
+                    <li>Todos os cenários de consórcio resultam em um total pago menor que o financiamento tradicional.</li>
+                    <li>As parcelas do consórcio são fixas, enquanto no financiamento tradicional elas são decrescentes.</li>
+                    <li>O prazo do consórcio é menor (188 meses) comparado ao financiamento tradicional (200 meses).</li>
+                    <li>Quanto maior o crédito contratado por Adenir, menor a entrada necessária para o comprador.</li>
+                </ul>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2023 Análise Financeira Inovadora. Todos os direitos reservados.</p>
+    </footer>
+
+    <script src="script.js"></script>
 </body>
 </html>
