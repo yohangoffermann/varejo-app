@@ -3,152 +3,100 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análise Comparativa: Consórcio vs Financiamento Tradicional</title>
+    <title>Fluxo Financeiro: Consórcio vs Financiamento Tradicional</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>Análise Comparativa: Consórcio vs Financiamento Tradicional</h1>
-    </header>
+    <div class="container">
+        <header>
+            <h1>Fluxo Financeiro: Consórcio vs Financiamento Tradicional</h1>
+        </header>
 
-    <main>
-        <section>
-            <h2>Fluxo de Caixa de Adenir</h2>
-            <table id="fluxo-caixa">
-                <thead>
-                    <tr>
-                        <th>Crédito (R$)</th>
-                        <th>Entrada (R$)</th>
-                        <th>Recebido Mês 0 (R$)</th>
-                        <th>Parcelas 12 meses (R$)</th>
-                        <th>Venda Imóvel (R$)</th>
-                        <th>Resultado (R$)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>1.440.000</td>
-                        <td>334.080</td>
-                        <td>1.774.080</td>
-                        <td>-103.680</td>
-                        <td>-1.200.000</td>
-                        <td>470.400</td>
-                    </tr>
-                    <tr>
-                        <td>1.530.000</td>
-                        <td>250.560</td>
-                        <td>1.780.560</td>
-                        <td>-110.160</td>
-                        <td>-1.200.000</td>
-                        <td>470.400</td>
-                    </tr>
-                    <tr>
-                        <td>1.620.000</td>
-                        <td>167.040</td>
-                        <td>1.787.040</td>
-                        <td>-116.640</td>
-                        <td>-1.200.000</td>
-                        <td>470.400</td>
-                    </tr>
-                    <tr>
-                        <td>1.710.000</td>
-                        <td>83.520</td>
-                        <td>1.793.520</td>
-                        <td>-123.120</td>
-                        <td>-1.200.000</td>
-                        <td>470.400</td>
-                    </tr>
-                    <tr>
-                        <td>1.800.000</td>
-                        <td>0</td>
-                        <td>1.800.000</td>
-                        <td>-129.600</td>
-                        <td>-1.200.000</td>
-                        <td>470.400</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+        <main>
+            <section class="flow-diagram">
+                <div class="node" id="adenir">
+                    <h2>Adenir</h2>
+                    <p>Imóvel: R$ 1.200.000</p>
+                </div>
+                <div class="flow-arrow right"></div>
+                <div class="node" id="consorcio">
+                    <h2>Consórcio</h2>
+                    <p>Crédito: R$ 1.800.000</p>
+                    <p>Taxa Adm: 1,2% a.a.</p>
+                    <p>Prazo: 200 meses</p>
+                </div>
+                <div class="flow-arrow left"></div>
+                <div class="node" id="comprador">
+                    <h2>Comprador</h2>
+                    <p>Assume saldo: R$ 2.030.400</p>
+                    <p>Parcela: R$ 10.800</p>
+                    <p>Prazo: 188 meses</p>
+                </div>
+            </section>
 
-        <section>
-            <h2>Cenário para o Comprador vs. Financiamento Tradicional</h2>
-            <table id="cenario-comprador">
-                <thead>
-                    <tr>
-                        <th>Cenário</th>
-                        <th>Entrada (R$)</th>
-                        <th>Saldo Assumido (R$)</th>
-                        <th>Parcela Mensal (R$)</th>
-                        <th>Prazo (meses)</th>
-                        <th>Total Pago (R$)</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>Crédito 1.440.000</td>
-                        <td>334.080</td>
-                        <td>1.624.320</td>
-                        <td>8.640</td>
-                        <td>188</td>
-                        <td>1.958.400</td>
-                    </tr>
-                    <tr>
-                        <td>Crédito 1.530.000</td>
-                        <td>250.560</td>
-                        <td>1.725.840</td>
-                        <td>9.180</td>
-                        <td>188</td>
-                        <td>1.976.400</td>
-                    </tr>
-                    <tr>
-                        <td>Crédito 1.620.000</td>
-                        <td>167.040</td>
-                        <td>1.827.360</td>
-                        <td>9.720</td>
-                        <td>188</td>
-                        <td>1.994.400</td>
-                    </tr>
-                    <tr>
-                        <td>Crédito 1.710.000</td>
-                        <td>83.520</td>
-                        <td>1.928.880</td>
-                        <td>10.260</td>
-                        <td>188</td>
-                        <td>2.012.400</td>
-                    </tr>
-                    <tr>
-                        <td>Crédito 1.800.000</td>
-                        <td>0</td>
-                        <td>2.030.400</td>
-                        <td>10.800</td>
-                        <td>188</td>
-                        <td>2.030.400</td>
-                    </tr>
-                    <tr>
-                        <td>Financ. Tradicional</td>
-                        <td>240.000</td>
-                        <td>960.000</td>
-                        <td>13.052 (inicial)</td>
-                        <td>200</td>
-                        <td>2.031.798</td>
-                    </tr>
-                </tbody>
-            </table>
-        </section>
+            <section class="key-metrics">
+                <h2>Métricas Chave</h2>
+                <div class="metric">
+                    <h3>Retorno Adenir</h3>
+                    <p class="big-number">R$ 470.400</p>
+                    <p>39,2% sobre valor do imóvel</p>
+                </div>
+                <div class="metric">
+                    <h3>Economia Comprador</h3>
+                    <p class="big-number">R$ 1.398</p>
+                    <p>vs. parcela inicial financiamento</p>
+                </div>
+                <div class="metric">
+                    <h3>Custo Efetivo Total</h3>
+                    <p class="big-number">6,17% a.a.</p>
+                    <p>vs. 10,49% a.a. no financiamento</p>
+                </div>
+            </section>
 
-        <section>
-            <h2>Notas</h2>
-            <ol>
-                <li>Todos os cenários de consórcio resultam em um total pago menor que o financiamento tradicional.</li>
-                <li>As parcelas do consórcio são fixas, enquanto no financiamento tradicional elas são decrescentes.</li>
-                <li>O prazo do consórcio é menor (188 meses) comparado ao financiamento tradicional (200 meses).</li>
-                <li>Quanto maior o crédito contratado por Adenir, menor a entrada necessária para o comprador.</li>
-            </ol>
-        </section>
-    </main>
+            <section class="comparison">
+                <h2>Comparativo Detalhado</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Métrica</th>
+                            <th>Consórcio</th>
+                            <th>Financiamento Tradicional</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Entrada</td>
+                            <td>R$ 0</td>
+                            <td>R$ 240.000</td>
+                        </tr>
+                        <tr>
+                            <td>Valor Financiado</td>
+                            <td>R$ 2.030.400</td>
+                            <td>R$ 960.000</td>
+                        </tr>
+                        <tr>
+                            <td>Parcela Inicial</td>
+                            <td>R$ 10.800</td>
+                            <td>R$ 13.052</td>
+                        </tr>
+                        <tr>
+                            <td>Prazo</td>
+                            <td>188 meses</td>
+                            <td>200 meses</td>
+                        </tr>
+                        <tr>
+                            <td>Total Pago</td>
+                            <td>R$ 2.030.400</td>
+                            <td>R$ 2.031.798</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </section>
+        </main>
 
-    <footer>
-        <p>© 2023 Análise Comparativa. Todos os direitos reservados.</p>
-    </footer>
+        <footer>
+            <p>© 2023 Análise Financeira Inovadora. Todos os direitos reservados.</p>
+        </footer>
+    </div>
 </body>
 </html>
