@@ -11,7 +11,70 @@
 <body>
     <div class="container">
         <header>
-            <h1>Análise Avançada: Consórcio vs Financiamento Tradicional</h1>
+            <h1>Análise Avançada: Consórcio vs Financiamento Tradicional</h1><!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simulador de Consórcio - Estratégia Adenir</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+</head>
+<body>
+    <header>
+        <h1>Simulador de Consórcio - Estratégia Adenir</h1>
+    </header>
+    <main>
+        <nav>
+            <button id="overviewBtn" class="active">Visão Geral</button>
+            <button id="detailsBtn">Detalhes</button>
+            <button id="comparisonBtn">Comparação</button>
+        </nav>
+        
+        <section id="overview" class="active">
+            <div id="overviewSummary"></div>
+            <div id="mainChart"></div>
+        </section>
+        
+        <section id="details">
+            <h2>Detalhes dos Cenários</h2>
+            <div id="scenariosDetails"></div>
+        </section>
+        
+        <section id="comparison">
+            <h2>Comparação de Cenários</h2>
+            <div id="entradaSaldoChart"></div>
+            <div id="comparisonTable"></div>
+        </section>
+
+        <div class="info-container">
+            <h2>Como Funciona</h2>
+            <ol>
+                <li>Adenir adquire o consórcio e o mantém por 12 meses.</li>
+                <li>Após este período, ele vende o imóvel de R$ 1.200.000 ao comprador.</li>
+                <li>O comprador paga a entrada e assume o saldo devedor do consórcio.</li>
+                <li>Adenir mantém um retorno constante de R$ 470.400 em todos os cenários.</li>
+            </ol>
+        </div>
+
+        <div class="highlight-box">
+            <h3>Retorno de Adenir</h3>
+            <p>Em todos os cenários, Adenir mantém um retorno constante de R$ 470.400.</p>
+        </div>
+
+        <div class="advantages-box">
+            <h3>Vantagens para o Comprador</h3>
+            <ul>
+                <li>Flexibilidade na escolha do valor de entrada</li>
+                <li>Assume um consórcio já em andamento</li>
+                <li>Potencialmente taxas mais atrativas que financiamentos tradicionais</li>
+                <li>Opção de financiar valor superior ao do imóvel</li>
+            </ul>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
         </header>
         
         <nav>
