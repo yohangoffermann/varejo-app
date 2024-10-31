@@ -7,46 +7,35 @@ document.addEventListener('DOMContentLoaded', function() {
         { credit: 1800000, entry: 0, percentEntry: 0 }
     ];
 
-    const financiamentoTradicional = {
-        valorImovel: 1200000,
-        entrada: 240000,
-        valorFinanciado: 960000,
-        prazo: 200,
-        taxaJuros: 0.1049,
-        parcelaInicial: 13052.90,
-        parcelaFinal: 4865.07
-    };
-
-    const retornoAlvo = 470400;
     const valorImovel = 1200000;
+    const retornoAdenir = 470400;
 
-    function calcularTotalPago(scenario) {
-        return scenario.credit + scenario.entry;
+    function calcularParcelasMensais(credito) {
+        return credito * 0.072 / 12; // 7.2% ao ano
     }
 
-    function calcularRetornoAdenir(scenario) {
-        const parcelasPagas12Meses = scenario.credit * 0.072; // 7.2% em 12 meses
-        return scenario.credit + scenario.entry - valorImovel - parcelasPagas12Meses;
+    function calcularSaldoDevedor(credito, parcelasMensais) {
+        return credito - (parcelasMensais * 12);
     }
 
-    function calcularTotalPagoFinanciamento() {
-        const parcelaMedia = (financiamentoTradicional.parcelaInicial + financiamentoTradicional.parcelaFinal) / 2;
-        return financiamentoTradicional.entrada + (parcelaMedia * financiamentoTradicional.prazo);
+    scenarios.forEach(scenario => {
+        scenario.parcelasMensais = calcularParcelasMensais(scenario.credit);
+        scenario.saldoDevedor = calcularSaldoDevedor(scenario.credit, scenario.parcelasMensais);
+    });
+
+    function formatCurrency(value) {
+        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
     }
 
     function renderMainChart() {
-        const chartData = scenarios.map((scenario, index) => ({
+        const chartData = scenarios.map(scenario => ({
             x: `Crédito ${formatCurrency(scenario.credit)}`,
-            y: calcularTotalPago(scenario)
+            y: scenario.credit + scenario.entry
         }));
-        chartData.push({
-            x: 'Financiamento Tradicional',
-            y: calcularTotalPagoFinanciamento()
-        });
 
         const options = {
             series: [{
-                name: 'Total Pago',
+                name: 'Total (Crédito + Entrada)',
                 data: chartData.map(item => item.y)
             }],
             chart: {
@@ -75,7 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     }
                 }
             },
-            colors: ['#3498db', '#2ecc71', '#f1c40f', '#e74c3c', '#9b59b6', '#34495e'],
+            colors: ['#3498db', '#2ecc71', '#f1c40f', '#e74c3c', '#9b59b6'],
             tooltip: {
                 y: {
                     formatter: function (val) {
@@ -91,7 +80,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderOverviewSummary() {
         const summary = `
-            <p>Esta análise compara diferentes cenários de consórcio com o financiamento tradicional, mantendo um retorno constante de ${formatCurrency(retornoAlvo)} para Adenir em todos os casos.</p>
+            <p>Esta análise compara diferentes cenários de consórcio, mantendo um retorno constante de ${formatCurrency(retornoAdenir)} para Adenir em todos os casos.</p>
             <p>Principais pontos:</p>
             <ul>
                 <li>O valor do imóvel é fixo em ${formatCurrency(valorImovel)}.</li>
@@ -112,8 +101,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <th>Crédito</th>
                     <th>Entrada</th>
                     <th>% Entrada</th>
-                    <th>Total Pago</th>
-                    <th>Retorno Adenir</th>
+                    <th>Parcela Mensal</th>
+                    <th>Saldo Devedor (12 meses)</th>
                 </tr>
         `;
 
@@ -124,8 +113,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>${formatCurrency(scenario.credit)}</td>
                     <td>${formatCurrency(scenario.entry)}</td>
                     <td>${scenario.percentEntry.toFixed(2)}%</td>
-                    <td>${formatCurrency(calcularTotalPago(scenario))}</td>
-                    <td>${formatCurrency(calcularRetornoAdenir(scenario))}</td>
+                    <td>${formatCurrency(scenario.parcelasMensais)}</td>
+                    <td>${formatCurrency(scenario.saldoDevedor)}</td>
                 </tr>
             `;
         });
@@ -134,38 +123,14 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('scenariosDetails').innerHTML = html;
     }
 
-    function renderFinancingDetails() {
-        const totalPago = calcularTotalPagoFinanciamento();
-        const html = `
-            <table>
-                <tr><th>Parâmetro</th><th>Valor</th></tr>
-                <tr><td>Valor do Imóvel</td><td>${formatCurrency(financiamentoTradicional.valorImovel)}</td></tr>
-                <tr><td>Entrada</td><td>${formatCurrency(financiamentoTradicional.entrada)}</td></tr>
-                <tr><td>Valor Financiado</td><td>${formatCurrency(financiamentoTradicional.valorFinanciado)}</td></tr>
-                <tr><td>Taxa de Juros</td><td>${(financiamentoTradicional.taxaJuros * 100).toFixed(2)}% a.a.</td></tr>
-                <tr><td>Prazo</td><td>${financiamentoTradicional.prazo} meses</td></tr>
-                <tr><td>Parcela Inicial</td><td>${formatCurrency(financiamentoTradicional.parcelaInicial)}</td></tr>
-                <tr><td>Parcela Final</td><td>${formatCurrency(financiamentoTradicional.parcelaFinal)}</td></tr>
-                <tr><td>Total Pago (estimativa)</td><td>${formatCurrency(totalPago)}</td></tr>
-            </table>
-        `;
-        document.getElementById('financingDetails').innerHTML = html;
-    }
-
-    function renderComparisonChart() {
-        const data = scenarios.map((scenario, index) => ({
-            scenario: `Crédito ${formatCurrency(scenario.credit)}`,
-            consorcio: calcularTotalPago(scenario),
-            financiamento: calcularTotalPagoFinanciamento()
-        }));
-
+    function renderEntradaSaldoChart() {
         const options = {
             series: [{
-                name: 'Consórcio',
-                data: data.map(d => d.consorcio)
+                name: 'Entrada',
+                data: scenarios.map(s => s.entry)
             }, {
-                name: 'Financiamento Tradicional',
-                data: data.map(d => d.financiamento)
+                name: 'Saldo Devedor',
+                data: scenarios.map(s => s.saldoDevedor)
             }],
             chart: {
                 type: 'bar',
@@ -187,11 +152,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 colors: ['transparent']
             },
             xaxis: {
-                categories: data.map(d => d.scenario),
+                categories: scenarios.map(s => `Crédito ${formatCurrency(s.credit)}`),
             },
             yaxis: {
                 title: {
-                    text: 'Valor Total (R$)'
+                    text: 'Valor (R$)'
                 },
                 labels: {
                     formatter: function (value) {
@@ -212,7 +177,7 @@ document.addEventListener('DOMContentLoaded', function() {
             colors: ['#3498db', '#e74c3c']
         };
 
-        const chart = new ApexCharts(document.querySelector("#comparisonChart"), options);
+        const chart = new ApexCharts(document.querySelector("#entradaSaldoChart"), options);
         chart.render();
     }
 
@@ -221,29 +186,20 @@ document.addEventListener('DOMContentLoaded', function() {
             <table>
                 <tr>
                     <th>Cenário</th>
-                    <th>Consórcio</th>
-                    <th>Financiamento</th>
-                    <th>Diferença</th>
-                    <th>Economia (%)</th>
+                    <th>Crédito</th>
+                    <th>Entrada</th>
+                    <th>Saldo Devedor (12 meses)</th>
                     <th>Retorno Adenir</th>
                 </tr>
         `;
 
-        const totalPagoFinanciamento = calcularTotalPagoFinanciamento();
-
         scenarios.forEach((scenario, index) => {
-            const totalPagoConsorcio = calcularTotalPago(scenario);
-            const diferenca = totalPagoFinanciamento - totalPagoConsorcio;
-            const percentualEconomia = (diferenca / totalPagoFinanciamento) * 100;
-            const retornoAdenir = calcularRetornoAdenir(scenario);
-
             html += `
                 <tr>
-                    <td>Crédito ${formatCurrency(scenario.credit)}</td>
-                    <td>${formatCurrency(totalPagoConsorcio)}</td>
-                    <td>${formatCurrency(totalPagoFinanciamento)}</td>
-                    <td>${formatCurrency(diferenca)}</td>
-                    <td>${percentualEconomia.toFixed(2)}%</td>
+                    <td>Cenário ${index + 1}</td>
+                    <td>${formatCurrency(scenario.credit)}</td>
+                    <td>${formatCurrency(scenario.entry)}</td>
+                    <td>${formatCurrency(scenario.saldoDevedor)}</td>
                     <td>${formatCurrency(retornoAdenir)}</td>
                 </tr>
             `;
@@ -253,16 +209,11 @@ document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('comparisonTable').innerHTML = html;
     }
 
-    function formatCurrency(value) {
-        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-    }
-
     // Initialize the page
     renderMainChart();
     renderOverviewSummary();
     renderScenariosDetails();
-    renderFinancingDetails();
-    renderComparisonChart();
+    renderEntradaSaldoChart();
     renderComparisonTable();
 
     // Navigation
