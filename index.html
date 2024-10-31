@@ -3,120 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análise Avançada: Consórcio vs Financiamento Tradicional</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-</head>
-<body>
-    <div class="container">
-        <header>
-            <h1>Análise Avançada: Consórcio vs Financiamento Tradicional</h1><!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simulador de Consórcio - Estratégia Adenir</title>
+    <title>Comparativo: Consórcio vs Financiamento Tradicional</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 </head>
 <body>
     <header>
-        <h1>Simulador de Consórcio - Estratégia Adenir</h1>
+        <h1>Comparativo: Consórcio Adenir vs Financiamento Tradicional</h1>
     </header>
     <main>
-        <nav>
-            <button id="overviewBtn" class="active">Visão Geral</button>
-            <button id="detailsBtn">Detalhes</button>
-            <button id="comparisonBtn">Comparação</button>
-        </nav>
-        
-        <section id="overview" class="active">
-            <div id="overviewSummary"></div>
-            <div id="mainChart"></div>
-        </section>
-        
-        <section id="details">
-            <h2>Detalhes dos Cenários</h2>
-            <div id="scenariosDetails"></div>
-        </section>
-        
-        <section id="comparison">
-            <h2>Comparação de Cenários</h2>
-            <div id="entradaSaldoChart"></div>
-            <div id="comparisonTable"></div>
+        <section id="parametros">
+            <h2>Parâmetros do Imóvel</h2>
+            <div>
+                <label for="valorImovel">Valor do Imóvel (R$):</label>
+                <input type="number" id="valorImovel" value="1000000">
+            </div>
+            <div>
+                <label for="valorFinanciamento">Valor do Financiamento (R$):</label>
+                <input type="number" id="valorFinanciamento" value="800000">
+            </div>
+            <div>
+                <label for="prazoMeses">Prazo (meses):</label>
+                <input type="number" id="prazoMeses" value="202">
+            </div>
+            <button id="calcular">Calcular</button>
         </section>
 
-        <div class="info-container">
-            <h2>Como Funciona</h2>
-            <ol>
-                <li>Adenir adquire o consórcio e o mantém por 12 meses.</li>
-                <li>Após este período, ele vende o imóvel de R$ 1.200.000 ao comprador.</li>
-                <li>O comprador paga a entrada e assume o saldo devedor do consórcio.</li>
-                <li>Adenir mantém um retorno constante de R$ 470.400 em todos os cenários.</li>
-            </ol>
-        </div>
+        <section id="resultados">
+            <h2>Resultados Comparativos</h2>
+            <div id="tabelaComparativa"></div>
+            <div id="graficoComparativo"></div>
+        </section>
 
-        <div class="highlight-box">
-            <h3>Retorno de Adenir</h3>
-            <p>Em todos os cenários, Adenir mantém um retorno constante de R$ 470.400.</p>
-        </div>
+        <section id="fluxoCaixa">
+            <h2>Fluxo de Caixa - Consórcio Adenir</h2>
+            <div id="fluxogramaConsorcio"></div>
+        </section>
 
-        <div class="advantages-box">
-            <h3>Vantagens para o Comprador</h3>
-            <ul>
-                <li>Flexibilidade na escolha do valor de entrada</li>
-                <li>Assume um consórcio já em andamento</li>
-                <li>Potencialmente taxas mais atrativas que financiamentos tradicionais</li>
-                <li>Opção de financiar valor superior ao do imóvel</li>
-            </ul>
-        </div>
+        <section id="vantagens">
+            <h2>Vantagens do Consórcio Adenir</h2>
+            <ul id="listaVantagens"></ul>
+        </section>
     </main>
+    <footer>
+        <p>© 2024 Simulador de Consórcio Adenir. Todos os direitos reservados.</p>
+    </footer>
     <script src="script.js"></script>
-</body>
-</html>
-        </header>
-        
-        <nav>
-            <button id="overviewBtn" class="active">Visão Geral</button>
-            <button id="detailsBtn">Detalhes</button>
-            <button id="comparisonBtn">Comparação</button>
-        </nav>
-        
-        <main>
-            <section id="overview" class="active">
-                <div class="chart-container">
-                    <div id="mainChart"></div>
-                </div>
-                <div class="summary">
-                    <h2>Resumo da Análise</h2>
-                    <p id="overviewSummary"></p>
-                </div>
-            </section>
-            
-            <section id="details">
-                <div class="scenarios">
-                    <h2>Cenários de Consórcio</h2>
-                    <div id="scenariosDetails"></div>
-                </div>
-                <div class="traditional-financing">
-                    <h2>Financiamento Tradicional</h2>
-                    <div id="financingDetails"></div>
-                </div>
-            </section>
-            
-            <section id="comparison">
-                <h2>Comparação Detalhada</h2>
-                <div id="comparisonChart"></div>
-                <div id="comparisonTable"></div>
-            </section>
-        </main>
-        
-        <footer>
-            <p>Desenvolvido por Y. M. Goffermann - © 2024</p>
-        </footer>
-    </div>
-
-    <script src="js/script.js"></script>
 </body>
 </html>
