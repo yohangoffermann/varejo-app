@@ -1,10 +1,10 @@
 document.addEventListener('DOMContentLoaded', function() {
     const scenarios = [
-        { credit: 1440000, entry: 334080 },
-        { credit: 1530000, entry: 250560 },
-        { credit: 1620000, entry: 167040 },
-        { credit: 1710000, entry: 83520 },
-        { credit: 1800000, entry: 0 }
+        { credit: 1440000, entry: 334080, percentEntry: 27.84 },
+        { credit: 1530000, entry: 250560, percentEntry: 20.88 },
+        { credit: 1620000, entry: 167040, percentEntry: 13.92 },
+        { credit: 1710000, entry: 83520, percentEntry: 6.96 },
+        { credit: 1800000, entry: 0, percentEntry: 0 }
     ];
 
     const financiamentoTradicional = {
@@ -17,8 +17,16 @@ document.addEventListener('DOMContentLoaded', function() {
         parcelaFinal: 4865.07
     };
 
+    const retornoAlvo = 470400;
+    const valorImovel = 1200000;
+
     function calcularTotalPago(scenario) {
         return scenario.credit + scenario.entry;
+    }
+
+    function calcularRetornoAdenir(scenario) {
+        const parcelasPagas12Meses = scenario.credit * 0.072; // 7.2% em 12 meses
+        return scenario.credit + scenario.entry - valorImovel - parcelasPagas12Meses;
     }
 
     function calcularTotalPagoFinanciamento() {
@@ -28,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderMainChart() {
         const chartData = scenarios.map((scenario, index) => ({
-            x: `Cenário ${index + 1}`,
+            x: `Crédito ${formatCurrency(scenario.credit)}`,
             y: calcularTotalPago(scenario)
         }));
         chartData.push({
@@ -63,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 labels: {
                     formatter: function (value) {
-                        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+                        return formatCurrency(value);
                     }
                 }
             },
@@ -71,7 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
             tooltip: {
                 y: {
                     formatter: function (val) {
-                        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+                        return formatCurrency(val);
                     }
                 }
             }
@@ -82,20 +90,15 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function renderOverviewSummary() {
-        const totalPagoConsorcio = calcularTotalPago(scenarios[scenarios.length - 1]);
-        const totalPagoFinanciamento = calcularTotalPagoFinanciamento();
-        const diferenca = totalPagoFinanciamento - totalPagoConsorcio;
-        const percentualEconomia = (diferenca / totalPagoFinanciamento) * 100;
-
         const summary = `
-            <p>Comparando o cenário mais favorável do consórcio com o financiamento tradicional:</p>
+            <p>Esta análise compara diferentes cenários de consórcio com o financiamento tradicional, mantendo um retorno constante de ${formatCurrency(retornoAlvo)} para Adenir em todos os casos.</p>
+            <p>Principais pontos:</p>
             <ul>
-                <li>Total pago no consórcio: ${formatCurrency(totalPagoConsorcio)}</li>
-                <li>Total pago no financiamento: ${formatCurrency(totalPagoFinanciamento)}</li>
-                <li>Economia potencial: ${formatCurrency(diferenca)}</li>
-                <li>Percentual de economia: ${percentualEconomia.toFixed(2)}%</li>
+                <li>O valor do imóvel é fixo em ${formatCurrency(valorImovel)}.</li>
+                <li>A entrada varia de 0% a 27,84% do valor do imóvel, dependendo do crédito.</li>
+                <li>O retorno para Adenir é consistente em todos os cenários de consórcio.</li>
+                <li>Esta estratégia oferece flexibilidade para atender diferentes perfis de compradores.</li>
             </ul>
-            <p>Esta análise demonstra que o consórcio pode oferecer uma economia significativa em comparação com o financiamento tradicional, dependendo das condições específicas de cada opção.</p>
         `;
 
         document.getElementById('overviewSummary').innerHTML = summary;
@@ -108,7 +111,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     <th>Cenário</th>
                     <th>Crédito</th>
                     <th>Entrada</th>
-                    <th>Total</th>
+                    <th>% Entrada</th>
+                    <th>Total Pago</th>
+                    <th>Retorno Adenir</th>
                 </tr>
         `;
 
@@ -118,7 +123,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>Cenário ${index + 1}</td>
                     <td>${formatCurrency(scenario.credit)}</td>
                     <td>${formatCurrency(scenario.entry)}</td>
+                    <td>${scenario.percentEntry.toFixed(2)}%</td>
                     <td>${formatCurrency(calcularTotalPago(scenario))}</td>
+                    <td>${formatCurrency(calcularRetornoAdenir(scenario))}</td>
                 </tr>
             `;
         });
@@ -147,7 +154,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
     function renderComparisonChart() {
         const data = scenarios.map((scenario, index) => ({
-            scenario: `Cenário ${index + 1}`,
+            scenario: `Crédito ${formatCurrency(scenario.credit)}`,
             consorcio: calcularTotalPago(scenario),
             financiamento: calcularTotalPagoFinanciamento()
         }));
@@ -188,7 +195,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 },
                 labels: {
                     formatter: function (value) {
-                        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+                        return formatCurrency(value);
                     }
                 }
             },
@@ -198,7 +205,7 @@ document.addEventListener('DOMContentLoaded', function() {
             tooltip: {
                 y: {
                     formatter: function (val) {
-                        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(val);
+                        return formatCurrency(val);
                     }
                 }
             },
@@ -218,6 +225,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <th>Financiamento</th>
                     <th>Diferença</th>
                     <th>Economia (%)</th>
+                    <th>Retorno Adenir</th>
                 </tr>
         `;
 
@@ -227,14 +235,16 @@ document.addEventListener('DOMContentLoaded', function() {
             const totalPagoConsorcio = calcularTotalPago(scenario);
             const diferenca = totalPagoFinanciamento - totalPagoConsorcio;
             const percentualEconomia = (diferenca / totalPagoFinanciamento) * 100;
+            const retornoAdenir = calcularRetornoAdenir(scenario);
 
             html += `
                 <tr>
-                    <td>Cenário ${index + 1}</td>
+                    <td>Crédito ${formatCurrency(scenario.credit)}</td>
                     <td>${formatCurrency(totalPagoConsorcio)}</td>
                     <td>${formatCurrency(totalPagoFinanciamento)}</td>
                     <td>${formatCurrency(diferenca)}</td>
                     <td>${percentualEconomia.toFixed(2)}%</td>
+                    <td>${formatCurrency(retornoAdenir)}</td>
                 </tr>
             `;
         });
