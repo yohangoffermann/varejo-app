@@ -3,24 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Análise Comparativa: Consórcio vs Financiamento Tradicional</title>
+    <title>Análise Avançada: Consórcio vs Financiamento Tradicional</title>
     <link rel="stylesheet" href="css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Análise Comparativa: Consórcio vs Financiamento Tradicional</h1>
+        <header>
+            <h1>Análise Avançada: Consórcio vs Financiamento Tradicional</h1>
+        </header>
         
-        <div class="chart-container">
-            <div id="comparisonChart"></div>
-        </div>
+        <nav>
+            <button id="overviewBtn" class="active">Visão Geral</button>
+            <button id="detailsBtn">Detalhes</button>
+            <button id="comparisonBtn">Comparação</button>
+        </nav>
         
-        <div class="info-container">
-            <h2>Detalhes da Análise</h2>
-            <div id="analysisDetails"></div>
-        </div>
+        <main>
+            <section id="overview" class="active">
+                <div class="chart-container">
+                    <div id="mainChart"></div>
+                </div>
+                <div class="summary">
+                    <h2>Resumo da Análise</h2>
+                    <p id="overviewSummary"></p>
+                </div>
+            </section>
+            
+            <section id="details">
+                <div class="scenarios">
+                    <h2>Cenários de Consórcio</h2>
+                    <div id="scenariosDetails"></div>
+                </div>
+                <div class="traditional-financing">
+                    <h2>Financiamento Tradicional</h2>
+                    <div id="financingDetails"></div>
+                </div>
+            </section>
+            
+            <section id="comparison">
+                <h2>Comparação Detalhada</h2>
+                <div id="comparisonChart"></div>
+                <div id="comparisonTable"></div>
+            </section>
+        </main>
+        
+        <footer>
+            <p>Desenvolvido por [Seu Nome] - © 2024</p>
+        </footer>
     </div>
 
-    <script src="script.js"></script>
+    <script src="js/script.js"></script>
 </body>
 </html>
