@@ -1,94 +1,239 @@
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    color: #333;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-}
+document.addEventListener('DOMContentLoaded', function() {
+    const calcularBtn = document.getElementById('calcular');
+    calcularBtn.addEventListener('click', realizarCalculos);
 
-header {
-    background-color: #3498db;
-    color: #fff;
-    text-align: center;
-    padding: 1rem;
-}
+    function realizarCalculos() {
+        const valorImovel = parseFloat(document.getElementById('valorImovel').value);
+        const valorFinanciamento = parseFloat(document.getElementById('valorFinanciamento').value);
+        const prazoMeses = parseInt(document.getElementById('prazoMeses').value);
+        const taxaAdmConsorcio = parseFloat(document.getElementById('taxaAdmConsorcio').value) / 100;
 
-section {
-    margin-bottom: 2rem;
-    padding: 1rem;
-    background-color: #f9f9f9;
-    border-radius: 5px;
-}
+        const taxasFinanciamento = {
+            santander: 0.0099,
+            itau: 0.0095,
+            bradesco: 0.0090,
+            inter: 0.0093
+        };
 
-h2 {
-    color: #2980b9;
-}
+        const parcelasFinanciamento = calcularParcelasFinanciamento(valorFinanciamento, taxasFinanciamento, prazoMeses);
+        const cenarioConsorcio = calcularCenariosConsorcio(valorImovel, prazoMeses, taxaAdmConsorcio);
 
-input[type="number"] {
-    width: 150px;
-    padding: 5px;
-    margin-right: 10px;
-}
+        exibirTabelaComparativa(parcelasFinanciamento, cenarioConsorcio, valorImovel, valorFinanciamento, prazoMeses);
+        exibirGraficoComparativo(parcelasFinanciamento, cenarioConsorcio);
+        exibirGraficoVisaoGeral(parcelasFinanciamento, cenarioConsorcio);
+        exibirFluxogramaConsorcio(cenarioConsorcio);
+        exibirVantagens();
+        exibirFAQ();
+    }
 
-button {
-    background-color: #3498db;
-    color: #fff;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
+    function calcularParcelasFinanciamento(valor, taxas, meses) {
+        let resultado = {};
+        for (let banco in taxas) {
+            const taxaMensal = taxas[banco];
+            resultado[banco] = valor * (taxaMensal * Math.pow(1 + taxaMensal, meses)) / (Math.pow(1 + taxaMensal, meses) - 1);
+        }
+        return resultado;
+    }
 
-button:hover {
-    background-color: #2980b9;
-}
+    function calcularCenariosConsorcio(valorImovel, prazoMeses, taxaAdmAnual) {
+        const taxaAdmMensal = taxaAdmAnual / 12;
 
-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-}
+        let cenarios = [];
+        for (let razaoCredito = 1.2; razaoCredito <= 1.5; razaoCredito += 0.1) {
+            const credito = valorImovel * razaoCredito;
+            const parcelaMensal = (credito * (1 + taxaAdmAnual)) / prazoMeses;
+            const entrada = credito - valorImovel;
+            
+            cenarios.push({
+                razaoCredito: razaoCredito,
+                credito: credito,
+                parcelaMensal: parcelaMensal,
+                entrada: entrada,
+                prazo: prazoMeses
+            });
+        }
+        return cenarios;
+    }
 
-th, td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    text-align: left;
-}
+    function exibirTabelaComparativa(parcelasFinanciamento, cenarioConsorcio, valorImovel, valorFinanciamento, prazoMeses) {
+        let html = '<table><tr><th>Opção</th><th>Parcela Inicial</th><th>Entrada</th><th>Prazo (meses)</th></tr>';
+        
+        for (let banco in parcelasFinanciamento) {
+            html += `<tr>
+                <td>${banco.charAt(0).toUpperCase() + banco.slice(1)}</td>
+                <td>R$ ${parcelasFinanciamento[banco].toFixed(2)}</td>
+                <td>R$ ${(valorImovel - valorFinanciamento).toFixed(2)}</td>
+                <td>${prazoMeses}</td>
+            </tr>`;
+        }
 
-th {
-    background-color: #3498db;
-    color: #fff;
-}
+        cenarioConsorcio.forEach(cenario => {
+            html += `<tr>
+                <td>Consórcio Land Bank (${(cenario.razaoCredito * 100).toFixed(0)}%)</td>
+                <td>R$ ${cenario.parcelaMensal.toFixed(2)}</td>
+                <td>R$ ${cenario.entrada.toFixed(2)}</td>
+                <td>${cenario.prazo}</td>
+            </tr>`;
+        });
 
-#graficoComparativo {
-    margin-top: 2rem;
-}
+        html += '</table>';
+        document.getElementById('tabelaComparativa').innerHTML = html;
+    }
 
-#fluxogramaConsorcio {
-    margin-top: 1rem;
-}
+    function exibirGraficoComparativo(parcelasFinanciamento, cenarioConsorcio) {
+        const options = {
+            series: [
+                ...Object.entries(parcelasFinanciamento).map(([banco, parcela]) => ({
+                    name: banco.charAt(0).toUpperCase() + banco.slice(1),
+                    data: [parcela]
+                })),
+                ...cenarioConsorcio.map(cenario => ({
+                    name: `Consórcio Land Bank ${(cenario.razaoCredito * 100).toFixed(0)}%`,
+                    data: [cenario.parcelaMensal]
+                }))
+            ],
+            chart: {
+                type: 'bar',
+                height: 350
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: true,
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: ['Parcela Mensal'],
+                title: {
+                    text: 'Valor da Parcela (R$)'
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Opções de Financiamento'
+                }
+            },
+            title: {
+                text: 'Comparativo de Parcelas Mensais',
+                align: 'center'
+            }
+        };
 
-#fluxogramaConsorcio ul {
-    list-style-type: none;
-    padding-left: 20px;
-}
+        const chart = new ApexCharts(document.querySelector("#graficoComparativo"), options);
+        chart.render();
+    }
 
-#fluxogramaConsorcio ul ul {
-    margin-top: 10px;
-}
+    function exibirGraficoVisaoGeral(parcelasFinanciamento, cenarioConsorcio) {
+        const custoTotalFinanciamento = Object.values(parcelasFinanciamento).map(parcela => parcela * 202);
+        const custoTotalConsorcio = cenarioConsorcio.map(cenario => cenario.parcelaMensal * cenario.prazo + cenario.entrada);
 
-#listaVantagens {
-    padding-left: 20px;
-}
+        const options = {
+            series: [{
+                name: 'Custo Total',
+                data: [...custoTotalFinanciamento, ...custoTotalConsorcio]
+            }],
+            chart: {
+                type: 'bar',
+                height: 350
+            },
+            plotOptions: {
+                bar: {
+                    horizontal: false,
+                }
+            },
+            dataLabels: {
+                enabled: false
+            },
+            xaxis: {
+                categories: [
+                    ...Object.keys(parcelasFinanciamento).map(banco => banco.charAt(0).toUpperCase() + banco.slice(1)),
+                    ...cenarioConsorcio.map(cenario => `Consórcio Land Bank ${(cenario.razaoCredito * 100).toFixed(0)}%`)
+                ],
+                title: {
+                    text: 'Opções de Financiamento'
+                }
+            },
+            yaxis: {
+                title: {
+                    text: 'Custo Total (R$)'
+                }
+            },
+            title: {
+                text: 'Visão Geral - Custo Total',
+                align: 'center'
+            }
+        };
 
-#listaVantagens li {
-    margin-bottom: 10px;
-}
+        const chart = new ApexCharts(document.querySelector("#graficoVisaoGeral"), options);
+        chart.render();
+    }
 
-footer {
-    text-align: center;
-    margin-top: 2rem;
-    padding: 1rem;
-    background-color: #f2f2f2;
-}
+    function exibirFluxogramaConsorcio(cenarioConsorcio) {
+        let html = '<h3>Fluxo de Caixa Simplificado:</h3>';
+        html += '<ul>';
+        cenarioConsorcio.forEach(cenario => {
+            html += `<li>Crédito ${(cenario.razaoCredito * 100).toFixed(0)}%:`;
+            html += `<ul>`;
+            html += `<li>Entrada: R$ ${cenario.entrada.toFixed(2)}</li>`;
+            html += `<li>Parcelas Mensais: R$ ${cenario.parcelaMensal.toFixed(2)} por ${cenario.prazo} meses</li>`;
+            html += `<li>Custo Total: R$ ${(cenario.parcelaMensal * cenario.prazo + cenario.entrada).toFixed(2)}</li>`;
+            html += `</ul>`;
+            html += `</li>`;
+        });
+        html += '</ul>';
+        document.getElementById('fluxogramaConsorcio').innerHTML = html;
+    }
+
+    function exibirVantagens() {
+        const vantagens = [
+            "Flexibilidade na escolha do valor de crédito",
+            "Possibilidade de crédito superior ao valor do imóvel",
+            "Taxas geralmente mais baixas que financiamento tradicional",
+            "Não há incidência de juros, apenas taxa de administração",
+            "Possibilidade de usar o FGTS para pagamento de parcelas ou lance",
+            "Potencial de retorno financeiro através da estratégia Land Bank"
+        ];
+
+        let html = '';
+        vantagens.forEach(vantagem => {
+            html += `<li>${vantagem}</li>`;
+        });
+
+        document.getElementById('listaVantagens').innerHTML = html;
+    }
+
+    function exibirFAQ() {
+        const faq = [
+            {
+                pergunta: "O que é o Consórcio Land Bank?",
+                resposta: "O Consórcio Land Bank é uma estratégia de investimento imobiliário que combina as vantagens do consórcio tradicional com a possibilidade de obter um retorno financeiro através da valorização do imóvel."
+            },
+            {
+                pergunta: "Como funciona o retorno de R$ 470.400?",
+                resposta: "O retorno de R$ 470.400 é calculado com base na diferença entre o valor do crédito obtido e o valor do imóvel, considerando também os custos do consórcio. Este valor representa o potencial de lucro ao utilizar a estratégia Land Bank."
+            },
+            {
+                pergunta: "Quais são os riscos envolvidos?",
+                resposta: "Os principais riscos incluem a possibilidade de desvalorização do imóvel, dificuldades em encontrar um comprador no momento desejado e oscilações no mercado imobiliário. É importante realizar uma análise cuidadosa antes de investir."
+            }
+        ];
+
+        let html = '';
+        faq.forEach(item => {
+            html += `<div class="faq-item">
+                        <h3>${item.pergunta}</h3>
+                        <p>${item.resposta}</p>
+                     </div>`;
+        });
+
+        document.getElementById('listaFAQ').innerHTML = html;
+    }
+
+    // Inicializar a página com os cálculos
+    realizarCalculos();
+
+    // Adicionar tooltips
+    tippy('[data-tippy-content]');
+});
