@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Comparativo: Consórcio vs Financiamento Tradicional</title>
+    <title>Comparativo: Consórcio Land Bank vs Financiamento Tradicional</title>
     <link rel="stylesheet" href="styles.css">
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+    <script src="https://cdn.jsdelivr.net/npm/tippy.js@6/dist/tippy-bundle.umd.min.js"></script>
 </head>
 <body>
     <header>
-        <h1>Comparativo: Consórcio Adenir vs Financiamento Tradicional</h1>
+        <h1>Comparativo: Consórcio Land Bank vs Financiamento Tradicional</h1>
     </header>
     <main>
         <section id="parametros">
@@ -26,27 +27,54 @@
                 <label for="prazoMeses">Prazo (meses):</label>
                 <input type="number" id="prazoMeses" value="202">
             </div>
+            <div>
+                <label for="taxaAdmConsorcio">Taxa de Administração do Consórcio (% a.a.):</label>
+                <input type="number" id="taxaAdmConsorcio" value="12" step="0.1">
+            </div>
             <button id="calcular">Calcular</button>
         </section>
 
-        <section id="resultados">
-            <h2>Resultados Comparativos</h2>
+        <nav>
+            <ul>
+                <li><a href="#visaoGeral">Visão Geral</a></li>
+                <li><a href="#detalhes">Detalhes</a></li>
+                <li><a href="#comparacao">Comparação</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+        </nav>
+
+        <section id="visaoGeral">
+            <h2>Visão Geral</h2>
+            <div id="graficoVisaoGeral"></div>
+        </section>
+
+        <section id="detalhes">
+            <h2>Detalhes</h2>
             <div id="tabelaComparativa"></div>
+        </section>
+
+        <section id="comparacao">
+            <h2>Comparação</h2>
             <div id="graficoComparativo"></div>
         </section>
 
         <section id="fluxoCaixa">
-            <h2>Fluxo de Caixa - Consórcio Adenir</h2>
+            <h2>Fluxo de Caixa - Consórcio Land Bank</h2>
             <div id="fluxogramaConsorcio"></div>
         </section>
 
         <section id="vantagens">
-            <h2>Vantagens do Consórcio Adenir</h2>
+            <h2>Vantagens do Consórcio Land Bank</h2>
             <ul id="listaVantagens"></ul>
+        </section>
+
+        <section id="faq">
+            <h2>Perguntas Frequentes</h2>
+            <div id="listaFAQ"></div>
         </section>
     </main>
     <footer>
-        <p>© 2024 Simulador de Consórcio Adenir. Todos os direitos reservados.</p>
+        <p>© 2024 Simulador de Consórcio Land Bank. Todos os direitos reservados.</p>
     </footer>
     <script src="script.js"></script>
 </body>
