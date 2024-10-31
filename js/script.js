@@ -1,232 +1,140 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const scenarios = [
-        { credit: 1440000, entry: 334080, percentEntry: 27.84 },
-        { credit: 1530000, entry: 250560, percentEntry: 20.88 },
-        { credit: 1620000, entry: 167040, percentEntry: 13.92 },
-        { credit: 1710000, entry: 83520, percentEntry: 6.96 },
-        { credit: 1800000, entry: 0, percentEntry: 0 }
-    ];
+    const calcularBtn = document.getElementById('calcular');
+    calcularBtn.addEventListener('click', realizarCalculos);
 
-    const valorImovel = 1200000;
-    const retornoAdenir = 470400;
+    function realizarCalculos() {
+        const valorImovel = parseFloat(document.getElementById('valorImovel').value);
+        const valorFinanciamento = parseFloat(document.getElementById('valorFinanciamento').value);
+        const prazoMeses = parseInt(document.getElementById('prazoMeses').value);
 
-    function calcularParcelasMensais(credito) {
-        return credito * 0.072 / 12; // 7.2% ao ano
+        const taxasFinanciamento = {
+            santander: 0.1229 / 12,
+            itau: 0.1159 / 12,
+            bradesco: 0.1049 / 12,
+            inter: 0.1149 / 12
+        };
+
+        const parcelasFinanciamento = calcularParcelasFinanciamento(valorFinanciamento, taxasFinanciamento, prazoMeses);
+        const cenarioConsorcio = calcularCenariosConsorcio(valorImovel);
+
+        exibirTabelaComparativa(parcelasFinanciamento, cenarioConsorcio);
+        exibirGraficoComparativo(parcelasFinanciamento, cenarioConsorcio);
+        exibirFluxogramaConsorcio(cenarioConsorcio);
+        exibirVantagens(cenarioConsorcio, parcelasFinanciamento);
     }
 
-    function calcularSaldoDevedor(credito, parcelasMensais) {
-        return credito - (parcelasMensais * 12);
+    function calcularParcelasFinanciamento(valor, taxas, meses) {
+        let resultado = {};
+        for (let banco in taxas) {
+            resultado[banco] = (valor * taxas[banco]) / (1 - Math.pow(1 + taxas[banco], -meses));
+        }
+        return resultado;
     }
 
-    scenarios.forEach(scenario => {
-        scenario.parcelasMensais = calcularParcelasMensais(scenario.credit);
-        scenario.saldoDevedor = calcularSaldoDevedor(scenario.credit, scenario.parcelasMensais);
-    });
+    function calcularCenariosConsorcio(valorImovel) {
+        const taxaAnualConsorcio = 0.072;
+        const taxaMensalConsorcio = taxaAnualConsorcio / 12;
+        const prazoConsorcio = 202; // Mesmo prazo do financiamento tradicional
 
-    function formatCurrency(value) {
-        return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+        let cenarios = [];
+        for (let razaoCredito = 1.2; razaoCredito <= 1.5; razaoCredito += 0.1) {
+            const credito = valorImovel * razaoCredito;
+            const parcelaMensal = (credito * taxaMensalConsorcio) / (1 - Math.pow(1 + taxaMensalConsorcio, -prazoConsorcio));
+            const entrada = credito - valorImovel;
+            
+            cenarios.push({
+                razaoCredito: razaoCredito,
+                credito: credito,
+                parcelaMensal: parcelaMensal,
+                entrada: entrada,
+                prazo: prazoConsorcio
+            });
+        }
+        return cenarios;
     }
 
-    function renderMainChart() {
-        const chartData = scenarios.map(scenario => ({
-            x: `Crédito ${formatCurrency(scenario.credit)}`,
-            y: scenario.credit + scenario.entry
-        }));
+    function exibirTabelaComparativa(parcelasFinanciamento, cenarioConsorcio) {
+        let html = '<table><tr><th>Opção</th><th>Parcela Inicial</th><th>Entrada</th><th>Prazo (meses)</th></tr>';
+        
+        for (let banco in parcelasFinanciamento) {
+            html += `<tr><td>${banco.charAt(0).toUpperCase() + banco.slice(1)}</td><td>R$ ${parcelasFinanciamento[banco].toFixed(2)}</td><td>R$ ${(valorImovel - valorFinanciamento).toFixed(2)}</td><td>${prazoMeses}</td></tr>`;
+        }
 
+        cenarioConsorcio.forEach(cenario => {
+            html += `<tr><td>Consórcio (${(cenario.razaoCredito * 100).toFixed(0)}%)</td><td>R$ ${cenario.parcelaMensal.toFixed(2)}</td><td>R$ ${cenario.entrada.toFixed(2)}</td><td>${cenario.prazo}</td></tr>`;
+        });
+
+        html += '</table>';
+        document.getElementById('tabelaComparativa').innerHTML = html;
+    }
+
+    function exibirGraficoComparativo(parcelasFinanciamento, cenarioConsorcio) {
         const options = {
-            series: [{
-                name: 'Total (Crédito + Entrada)',
-                data: chartData.map(item => item.y)
-            }],
+            series: [
+                ...Object.entries(parcelasFinanciamento).map(([banco, parcela]) => ({
+                    name: banco.charAt(0).toUpperCase() + banco.slice(1),
+                    data: [parcela]
+                })),
+                ...cenarioConsorcio.map(cenario => ({
+                    name: `Consórcio ${(cenario.razaoCredito * 100).toFixed(0)}%`,
+                    data: [cenario.parcelaMensal]
+                }))
+            ],
             chart: {
                 type: 'bar',
                 height: 350
             },
             plotOptions: {
                 bar: {
-                    borderRadius: 4,
-                    horizontal: false,
+                    horizontal: true,
                 }
             },
             dataLabels: {
                 enabled: false
             },
             xaxis: {
-                categories: chartData.map(item => item.x),
+                categories: ['Parcela Mensal'],
+                title: {
+                    text: 'Valor da Parcela (R$)'
+                }
             },
             yaxis: {
                 title: {
-                    text: 'Valor Total (R$)'
-                },
-                labels: {
-                    formatter: function (value) {
-                        return formatCurrency(value);
-                    }
+                    text: 'Opções de Financiamento'
                 }
             },
-            colors: ['#3498db', '#2ecc71', '#f1c40f', '#e74c3c', '#9b59b6'],
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return formatCurrency(val);
-                    }
-                }
+            title: {
+                text: 'Comparativo de Parcelas Mensais',
+                align: 'center'
             }
         };
 
-        const chart = new ApexCharts(document.querySelector("#mainChart"), options);
+        const chart = new ApexCharts(document.querySelector("#graficoComparativo"), options);
         chart.render();
     }
 
-    function renderOverviewSummary() {
-        const summary = `
-            <p>Esta análise compara diferentes cenários de consórcio, mantendo um retorno constante de ${formatCurrency(retornoAdenir)} para Adenir em todos os casos.</p>
-            <p>Principais pontos:</p>
-            <ul>
-                <li>O valor do imóvel é fixo em ${formatCurrency(valorImovel)}.</li>
-                <li>A entrada varia de 0% a 27,84% do valor do imóvel, dependendo do crédito.</li>
-                <li>O retorno para Adenir é consistente em todos os cenários de consórcio.</li>
-                <li>Esta estratégia oferece flexibilidade para atender diferentes perfis de compradores.</li>
-            </ul>
-        `;
-
-        document.getElementById('overviewSummary').innerHTML = summary;
+    function exibirFluxogramaConsorcio(cenarioConsorcio) {
+        // Implementar visualização do fluxograma do consórcio
+        // Pode ser um diagrama simples ou uma representação textual
     }
 
-    function renderScenariosDetails() {
-        let html = `
-            <table>
-                <tr>
-                    <th>Cenário</th>
-                    <th>Crédito</th>
-                    <th>Entrada</th>
-                    <th>% Entrada</th>
-                    <th>Parcela Mensal</th>
-                    <th>Saldo Devedor (12 meses)</th>
-                </tr>
-        `;
+    function exibirVantagens(cenarioConsorcio, parcelasFinanciamento) {
+        const vantagens = [
+            "Flexibilidade na escolha do valor de crédito",
+            "Possibilidade de crédito superior ao valor do imóvel",
+            "Taxas geralmente mais baixas que financiamento tradicional",
+            "Não há incidência de juros, apenas taxa de administração",
+            "Possibilidade de usar o FGTS para pagamento de parcelas ou lance"
+        ];
 
-        scenarios.forEach((scenario, index) => {
-            html += `
-                <tr>
-                    <td>Cenário ${index + 1}</td>
-                    <td>${formatCurrency(scenario.credit)}</td>
-                    <td>${formatCurrency(scenario.entry)}</td>
-                    <td>${scenario.percentEntry.toFixed(2)}%</td>
-                    <td>${formatCurrency(scenario.parcelasMensais)}</td>
-                    <td>${formatCurrency(scenario.saldoDevedor)}</td>
-                </tr>
-            `;
+        let html = '';
+        vantagens.forEach(vantagem => {
+            html += `<li>${vantagem}</li>`;
         });
 
-        html += '</table>';
-        document.getElementById('scenariosDetails').innerHTML = html;
+        document.getElementById('listaVantagens').innerHTML = html;
     }
 
-    function renderEntradaSaldoChart() {
-        const options = {
-            series: [{
-                name: 'Entrada',
-                data: scenarios.map(s => s.entry)
-            }, {
-                name: 'Saldo Devedor',
-                data: scenarios.map(s => s.saldoDevedor)
-            }],
-            chart: {
-                type: 'bar',
-                height: 350
-            },
-            plotOptions: {
-                bar: {
-                    horizontal: false,
-                    columnWidth: '55%',
-                    endingShape: 'rounded'
-                },
-            },
-            dataLabels: {
-                enabled: false
-            },
-            stroke: {
-                show: true,
-                width: 2,
-                colors: ['transparent']
-            },
-            xaxis: {
-                categories: scenarios.map(s => `Crédito ${formatCurrency(s.credit)}`),
-            },
-            yaxis: {
-                title: {
-                    text: 'Valor (R$)'
-                },
-                labels: {
-                    formatter: function (value) {
-                        return formatCurrency(value);
-                    }
-                }
-            },
-            fill: {
-                opacity: 1
-            },
-            tooltip: {
-                y: {
-                    formatter: function (val) {
-                        return formatCurrency(val);
-                    }
-                }
-            },
-            colors: ['#3498db', '#e74c3c']
-        };
-
-        const chart = new ApexCharts(document.querySelector("#entradaSaldoChart"), options);
-        chart.render();
-    }
-
-    function renderComparisonTable() {
-        let html = `
-            <table>
-                <tr>
-                    <th>Cenário</th>
-                    <th>Crédito</th>
-                    <th>Entrada</th>
-                    <th>Saldo Devedor (12 meses)</th>
-                    <th>Retorno Adenir</th>
-                </tr>
-        `;
-
-        scenarios.forEach((scenario, index) => {
-            html += `
-                <tr>
-                    <td>Cenário ${index + 1}</td>
-                    <td>${formatCurrency(scenario.credit)}</td>
-                    <td>${formatCurrency(scenario.entry)}</td>
-                    <td>${formatCurrency(scenario.saldoDevedor)}</td>
-                    <td>${formatCurrency(retornoAdenir)}</td>
-                </tr>
-            `;
-        });
-
-        html += '</table>';
-        document.getElementById('comparisonTable').innerHTML = html;
-    }
-
-    // Initialize the page
-    renderMainChart();
-    renderOverviewSummary();
-    renderScenariosDetails();
-    renderEntradaSaldoChart();
-    renderComparisonTable();
-
-    // Navigation
-    const navButtons = document.querySelectorAll('nav button');
-    const sections = document.querySelectorAll('main section');
-
-    navButtons.forEach(button => {
-        button.addEventListener('click', function() {
-            const targetId = this.id.replace('Btn', '');
-            sections.forEach(section => section.classList.remove('active'));
-            document.getElementById(targetId).classList.add('active');
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            this.classList.add('active');
-        });
-    });
+    // Inicializar a página com os cálculos
+    realizarCalculos();
 });
