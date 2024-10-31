@@ -1,31 +1,114 @@
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --background-color: #ecf0f1;
+    --text-color: #34495e;
+    --highlight-color: #e74c3c;
+}
+
 body {
-    font-family: Arial, sans-serif;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     line-height: 1.6;
-    color: #333;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #f4f4f4;
+    color: var(--text-color);
+    background-color: var(--background-color);
+    margin: 0;
+    padding: 0;
 }
 
 .container {
-    background-color: #fff;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+header {
+    background-color: var(--primary-color);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-bottom: 20px;
+}
+
+h1, h2 {
+    margin-bottom: 20px;
+}
+
+nav {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+nav button {
+    background-color: var(--secondary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+nav button.active {
+    background-color: var(--primary-color);
+}
+
+section {
+    display: none;
+    background-color: white;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0,0,0,0.1);
 }
 
-h1, h2 {
-    color: #2c3e50;
+section.active {
+    display: block;
 }
 
 .chart-container {
-    margin-top: 30px;
-    margin-bottom: 30px;
+    height: 400px;
+    margin-bottom: 20px;
 }
 
-.info-container {
-    background-color: #ecf0f1;
-    padding: 20px;
-    border-radius: 8px;
+.summary, .scenarios, .traditional-financing {
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+th {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+footer {
+    text-align: center;
+    margin-top: 20px;
+    padding: 20px 0;
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+@media (max-width: 768px) {
+    nav {
+        flex-direction: column;
+    }
+    
+    nav button {
+        margin-bottom: 10px;
+    }
 }
