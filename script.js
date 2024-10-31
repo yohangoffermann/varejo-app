@@ -8,38 +8,38 @@ document.addEventListener('DOMContentLoaded', function() {
         const prazoMeses = parseInt(document.getElementById('prazoMeses').value);
 
         const taxasFinanciamento = {
-            santander: 0.1229 / 12,
-            itau: 0.1159 / 12,
-            bradesco: 0.1049 / 12,
-            inter: 0.1149 / 12
+            santander: 0.0099, // 0.99% ao mês
+            itau: 0.0095,      // 0.95% ao mês
+            bradesco: 0.0090,  // 0.90% ao mês
+            inter: 0.0093      // 0.93% ao mês
         };
 
         const parcelasFinanciamento = calcularParcelasFinanciamento(valorFinanciamento, taxasFinanciamento, prazoMeses);
-        const cenarioConsorcio = calcularCenariosConsorcio(valorImovel);
+        const cenarioConsorcio = calcularCenariosConsorcio(valorImovel, prazoMeses);
 
-        exibirTabelaComparativa(parcelasFinanciamento, cenarioConsorcio);
+        exibirTabelaComparativa(parcelasFinanciamento, cenarioConsorcio, valorImovel, valorFinanciamento, prazoMeses);
         exibirGraficoComparativo(parcelasFinanciamento, cenarioConsorcio);
         exibirFluxogramaConsorcio(cenarioConsorcio);
-        exibirVantagens(cenarioConsorcio, parcelasFinanciamento);
+        exibirVantagens();
     }
 
     function calcularParcelasFinanciamento(valor, taxas, meses) {
         let resultado = {};
         for (let banco in taxas) {
-            resultado[banco] = (valor * taxas[banco]) / (1 - Math.pow(1 + taxas[banco], -meses));
+            const taxaMensal = taxas[banco];
+            resultado[banco] = valor * (taxaMensal * Math.pow(1 + taxaMensal, meses)) / (Math.pow(1 + taxaMensal, meses) - 1);
         }
         return resultado;
     }
 
-    function calcularCenariosConsorcio(valorImovel) {
-        const taxaAnualConsorcio = 0.072;
-        const taxaMensalConsorcio = taxaAnualConsorcio / 12;
-        const prazoConsorcio = 202; // Mesmo prazo do financiamento tradicional
+    function calcularCenariosConsorcio(valorImovel, prazoMeses) {
+        const taxaAdmAnual = 0.12; // 12% ao ano
+        const taxaAdmMensal = taxaAdmAnual / 12;
 
         let cenarios = [];
         for (let razaoCredito = 1.2; razaoCredito <= 1.5; razaoCredito += 0.1) {
             const credito = valorImovel * razaoCredito;
-            const parcelaMensal = (credito * taxaMensalConsorcio) / (1 - Math.pow(1 + taxaMensalConsorcio, -prazoConsorcio));
+            const parcelaMensal = (credito * (1 + taxaAdmAnual)) / prazoMeses;
             const entrada = credito - valorImovel;
             
             cenarios.push({
@@ -47,21 +47,31 @@ document.addEventListener('DOMContentLoaded', function() {
                 credito: credito,
                 parcelaMensal: parcelaMensal,
                 entrada: entrada,
-                prazo: prazoConsorcio
+                prazo: prazoMeses
             });
         }
         return cenarios;
     }
 
-    function exibirTabelaComparativa(parcelasFinanciamento, cenarioConsorcio) {
+    function exibirTabelaComparativa(parcelasFinanciamento, cenarioConsorcio, valorImovel, valorFinanciamento, prazoMeses) {
         let html = '<table><tr><th>Opção</th><th>Parcela Inicial</th><th>Entrada</th><th>Prazo (meses)</th></tr>';
         
         for (let banco in parcelasFinanciamento) {
-            html += `<tr><td>${banco.charAt(0).toUpperCase() + banco.slice(1)}</td><td>R$ ${parcelasFinanciamento[banco].toFixed(2)}</td><td>R$ ${(valorImovel - valorFinanciamento).toFixed(2)}</td><td>${prazoMeses}</td></tr>`;
+            html += `<tr>
+                <td>${banco.charAt(0).toUpperCase() + banco.slice(1)}</td>
+                <td>R$ ${parcelasFinanciamento[banco].toFixed(2)}</td>
+                <td>R$ ${(valorImovel - valorFinanciamento).toFixed(2)}</td>
+                <td>${prazoMeses}</td>
+            </tr>`;
         }
 
         cenarioConsorcio.forEach(cenario => {
-            html += `<tr><td>Consórcio (${(cenario.razaoCredito * 100).toFixed(0)}%)</td><td>R$ ${cenario.parcelaMensal.toFixed(2)}</td><td>R$ ${cenario.entrada.toFixed(2)}</td><td>${cenario.prazo}</td></tr>`;
+            html += `<tr>
+                <td>Consórcio (${(cenario.razaoCredito * 100).toFixed(0)}%)</td>
+                <td>R$ ${cenario.parcelaMensal.toFixed(2)}</td>
+                <td>R$ ${cenario.entrada.toFixed(2)}</td>
+                <td>${cenario.prazo}</td>
+            </tr>`;
         });
 
         html += '</table>';
@@ -114,11 +124,22 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function exibirFluxogramaConsorcio(cenarioConsorcio) {
-        // Implementar visualização do fluxograma do consórcio
-        // Pode ser um diagrama simples ou uma representação textual
+        // Implementação do fluxograma (pode ser expandido posteriormente)
+        let html = '<h3>Fluxo de Caixa Simplificado:</h3>';
+        html += '<ul>';
+        cenarioConsorcio.forEach(cenario => {
+            html += `<li>Crédito ${(cenario.razaoCredito * 100).toFixed(0)}%:`;
+            html += `<ul>`;
+            html += `<li>Entrada: R$ ${cenario.entrada.toFixed(2)}</li>`;
+            html += `<li>Parcelas Mensais: R$ ${cenario.parcelaMensal.toFixed(2)} por ${cenario.prazo} meses</li>`;
+            html += `</ul>`;
+            html += `</li>`;
+        });
+        html += '</ul>';
+        document.getElementById('fluxogramaConsorcio').innerHTML = html;
     }
 
-    function exibirVantagens(cenarioConsorcio, parcelasFinanciamento) {
+    function exibirVantagens() {
         const vantagens = [
             "Flexibilidade na escolha do valor de crédito",
             "Possibilidade de crédito superior ao valor do imóvel",
