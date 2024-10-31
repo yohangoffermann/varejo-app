@@ -14,38 +14,40 @@ header {
     padding: 1rem;
 }
 
-nav {
-    display: flex;
-    justify-content: center;
-    margin-bottom: 20px;
+section {
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 5px;
 }
 
-nav button {
+h2 {
+    color: #2980b9;
+}
+
+input[type="number"] {
+    width: 150px;
+    padding: 5px;
+    margin-right: 10px;
+}
+
+button {
     background-color: #3498db;
     color: #fff;
     border: none;
     padding: 10px 20px;
-    margin: 0 5px;
     cursor: pointer;
     transition: background-color 0.3s;
 }
 
-nav button:hover, nav button.active {
+button:hover {
     background-color: #2980b9;
-}
-
-section {
-    display: none;
-}
-
-section.active {
-    display: block;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-bottom: 20px;
+    margin-top: 1rem;
 }
 
 th, td {
@@ -55,22 +57,29 @@ th, td {
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #3498db;
+    color: #fff;
 }
 
-.info-container, .highlight-box, .advantages-box {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 15px;
-    margin-bottom: 20px;
-    border-radius: 5px;
+#graficoComparativo {
+    margin-top: 2rem;
 }
 
-.highlight-box {
-    background-color: #e8f4fd;
-    border-color: #3498db;
+#fluxogramaConsorcio {
+    /* Estilizar o fluxograma conforme necessário */
 }
 
-.advantages-box ul {
+#listaVantagens {
     padding-left: 20px;
+}
+
+#listaVantagens li {
+    margin-bottom: 10px;
+}
+
+footer {
+    text-align: center;
+    margin-top: 2rem;
+    padding: 1rem;
+    background-color: #f2f2f2;
 }
