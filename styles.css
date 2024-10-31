@@ -66,7 +66,16 @@ th {
 }
 
 #fluxogramaConsorcio {
-    /* Estilizar o fluxograma conforme necessário */
+    margin-top: 1rem;
+}
+
+#fluxogramaConsorcio ul {
+    list-style-type: none;
+    padding-left: 20px;
+}
+
+#fluxogramaConsorcio ul ul {
+    margin-top: 10px;
 }
 
 #listaVantagens {
